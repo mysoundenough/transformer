@@ -40,18 +40,18 @@ pathfile_train04 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数�
 # read02 = readfile(pathfile_test02)
 # read03 = readfile(pathfile_test03)
 # read04 = readfile(pathfile_test04)
-# read05 = readfile(pathfile_train01)
-# read06 = readfile(pathfile_train02)
-# read07 = readfile(pathfile_train03)
-# read08 = readfile(pathfile_train04)
+read05 = readfile(pathfile_train01)
+read06 = readfile(pathfile_train02)
+read07 = readfile(pathfile_train03)
+read08 = readfile(pathfile_train04)
 # origin_data_test01 = read01.returndata()
 # origin_data_test02 = read02.returndata()
 # origin_data_test03 = read03.returndata()
 # origin_data_test04 = read04.returndata()
-# origin_data_train01 = read05.returndata()
-# origin_data_train02 = read06.returndata()
-# origin_data_train03 = read07.returndata()
-# origin_data_train04 = read08.returndata()
+origin_data_train01 = read05.returndata()
+origin_data_train02 = read06.returndata()
+origin_data_train03 = read07.returndata()
+origin_data_train04 = read08.returndata()
 # print("origin_data_test01", origin_data_test01)
 # print("origin_data_test02", origin_data_test02)
 # print("origin_data_test03", origin_data_test03)
@@ -72,9 +72,17 @@ pathfile_train04 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数�
 # deal04 = dealfile(origin_data_test04)
 # deal04.dealdata()
 
-# 转化为numpy的array格式
-train_info = np.array(origin_data_train01.iloc[0:-1:100, 0:-1], dtype = 'float32')
+# pd concat
+train_info_00 = pd.concat([origin_data_train01,origin_data_train02,origin_data_train03,origin_data_train04])
 
+
+# 转化为numpy的array格式
+# train_info_01 = np.array(origin_data_train01.iloc[0:-1:100, 0:-1], dtype = 'float32')
+# train_info_02 = np.array(origin_data_train02.iloc[0:-1:100, 0:-1], dtype = 'float32')
+# train_info_03 = np.array(origin_data_train03.iloc[0:-1:100, 0:-1], dtype = 'float32')
+# train_info_04 = np.array(origin_data_train04.iloc[0:-1:100, 0:-1], dtype = 'float32')
+
+train_info = np.array(train_info_00.iloc[0:-1:100, 0:-1], dtype = 'float32')
 
 # 数据形成source target batchs
 # 批次化数据
@@ -154,7 +162,7 @@ lr = 5.0
 optimizer = torch.optim.SGD(model.parameters(), lr=lr)
 
 # 定义学习率调整器 使用torch自带的lr_scheduler 将优化器传入
-scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 1.0, gamma=0.95)
+scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 1.0, gamma=0.997)
 
 
 # 训练 验证 测试
@@ -249,7 +257,7 @@ def evaluate(eval_model, data_source):
             data, targets = get_batch(data_source, i)
             output = eval_model(data)
             # 对输出形状进行扁平化 变为全部词汇的概率分布
-            output_flat = output.view(-1, ntokens)
+            output_flat = output.view(-1, data.shape[0] * data.shape[1] * data.shape[2])
             # 获得评估过程的总损失
             total_loss += criterion(output_flat, targets).item()
     # 返回每轮总损失
