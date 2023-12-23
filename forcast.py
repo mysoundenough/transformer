@@ -28,15 +28,14 @@ else:
 
 # 数据读取
 pathfile_test01 = '../../数据/19.FMCRD_Data/test_load0_1e_m15_200x5.csv'
-
-pathfile_test02 = '../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5HI.csv'
-pathfile_test03 = '../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5LO.csv'
-pathfile_test04 = '../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5MED.csv'
+pathfile_test02 = '../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5HI.csv'
+pathfile_test03 = '../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5LO.csv'
+pathfile_test04 = '../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5MED.csv'
 pathfile_train01 = '../../数据/19.FMCRD_Data/train_load0_1e_m15_200x5.csv'
 # pathfile_train01 = os.path.abspath(os.path.join(os.getcwd(), "../.."))
-pathfile_train02 = '../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5HI.csv'
-pathfile_train03 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数据/19.FMCRD_Data/train_noisy_1e_m15_200x5LO.csv'
-pathfile_train04 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数据/19.FMCRD_Data/train_noisy_1e_m15_200x5MED.csv'
+pathfile_train02 = '../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5HI.csv'
+pathfile_train03 = '../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5LO.csv'
+pathfile_train04 = '../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5MED.csv'
 
 
 # read01 = readfile(pathfile_test01)
@@ -44,17 +43,13 @@ pathfile_train04 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数�
 # read03 = readfile(pathfile_test03)
 # read04 = readfile(pathfile_test04)
 read05 = readfile(pathfile_train01)
-# read06 = readfile(pathfile_train02)
-# read07 = readfile(pathfile_train03)
-# read08 = readfile(pathfile_train04)
-# origin_data_test01 = read01.returndata()
-# origin_data_test02 = read02.returndata()
-# origin_data_test03 = read03.returndata()
-# origin_data_test04 = read04.returndata()
+read06 = readfile(pathfile_train02)
+read07 = readfile(pathfile_train03)
+read08 = readfile(pathfile_train04)
 origin_data_train01 = read05.returndata()
-# origin_data_train02 = read06.returndata()
-# origin_data_train03 = read07.returndata()
-# origin_data_train04 = read08.returndata()
+origin_data_train02 = read06.returndata()
+origin_data_train03 = read07.returndata()
+origin_data_train04 = read08.returndata()
 # print("origin_data_test01", origin_data_test01)
 # print("origin_data_test02", origin_data_test02)
 # print("origin_data_test03", origin_data_test03)
@@ -157,7 +152,7 @@ lr = 5.0
 optimizer = torch.optim.SGD(model.parameters(), lr=lr)
 
 # 定义学习率调整器 使用torch自带的lr_scheduler 将优化器传入
-scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 1.0, gamma=0.9992)
+scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 1.0, gamma=0.99992)
 
 
 # 训练 验证 测试
