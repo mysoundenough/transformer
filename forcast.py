@@ -70,8 +70,12 @@ origin_data_train04 = read08.returndata()
 # deal04 = dealfile(origin_data_test04)
 # deal04.dealdata()
 
+# pd concat
+train_info_00 = pd.concat([origin_data_train01,origin_data_train02,origin_data_train03,origin_data_train04])
+
+
 # 转化为numpy的array格式
-train_info = np.array(origin_data_train01.iloc[0:-1:100, 0:-1], dtype = 'float32')
+train_info = np.array(train_info_00.iloc[0:-1:100, 0:-1], dtype = 'float32')
 
 
 # 数据形成source target batchs
