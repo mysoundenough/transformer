@@ -44,15 +44,6 @@ pathfile_train01 = '../../../数据/19.FMCRD_Data/train_load0_1e_m15_200x5_under
 pathfile_train02 = '../../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5HI_undersampling100.csv'
 pathfile_train03 = '../../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5LO_undersampling100.csv'
 pathfile_train04 = '../../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5MED_undersampling100.csv'
-# win
-# pathfile_test01 = '../../../数据/19.FMCRD_Data/test_load0_1e_m15_200x5_undersampling100.csv'
-# pathfile_test02 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5HI_undersampling100.csv'
-# pathfile_test03 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5LO_undersampling100.csv'
-# pathfile_test04 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5MED_undersampling100.csv'
-# pathfile_train01 = '../../../数据/19.FMCRD_Data/train_load0_1e_m15_200x5_undersampling100.csv'
-# pathfile_train02 = '../../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5HI_undersampling100.csv'
-# pathfile_train03 = '../../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5LO_undersampling100.csv'
-# pathfile_train04 = '../../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5MED_undersampling100.csv'
 
 
 read01 = readfile(pathfile_test01)
