@@ -12,7 +12,7 @@ class readfile():
     def __init__(self, filepath):
         print("读取数据开始")
         start = time.time()
-        self.data01 = []
+        self.data01 = None
         self.data01 = pd.read_csv(filepath)
         end = time.time()
         print("读取数据完毕，时间花费：%d", (end - start), "s", sep = "")
@@ -54,7 +54,7 @@ class dealfile():
         self.undersamplinged_data.to_csv(path_or_buf=path)
         pass
 
-    """
+"""
 # 数据读取
 pathfile_test01 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数据/19.FMCRD_Data/test_load0_1e_m15_200x5.csv'
 pathfile_test02 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数据/19.FMCRD_Data/test_noisy_1e_m15_200x5HI.csv'
@@ -94,29 +94,29 @@ origin_data_test04 = read04.returndata()
 # 数据分析
 # deal01 = dealfile(origin_data_train01)
 # deal01.undersampling_data(100)
-# deal01.writedata(pathfile_train01 + "_undersampling100.csv")
+# deal01.writedata(pathfile_train01[:-4] + "_undersampling100.csv")
 # deal02 = dealfile(origin_data_train02)
 # deal02.undersampling_data(100)
-# deal02.writedata(pathfile_train02 + "_undersampling100.csv")
+# deal02.writedata(pathfile_train02[:-4] + "_undersampling100.csv")
 # deal03 = dealfile(origin_data_train03)
 # deal03.undersampling_data(100)
-# deal03.writedata(pathfile_train03 + "_undersampling100.csv")
+# deal03.writedata(pathfile_train03[:-4] + "_undersampling100.csv")
 # deal04 = dealfile(origin_data_train04)
 # deal04.undersampling_data(100)
-# deal04.writedata(pathfile_train04 + "_undersampling100.csv")
+# deal04.writedata(pathfile_train04[:-4] + "_undersampling100.csv")
 
 deal01 = dealfile(origin_data_test01)
 deal01.undersampling_data(100)
-deal01.writedata(pathfile_test01 + "_undersampling100.csv")
+deal01.writedata(pathfile_test01[:-4] + "_undersampling100.csv")
 deal02 = dealfile(origin_data_test02)
 deal02.undersampling_data(100)
-deal02.writedata(pathfile_test02 + "_undersampling100.csv")
+deal02.writedata(pathfile_test02[:-4] + "_undersampling100.csv")
 deal03 = dealfile(origin_data_test03)
 deal03.undersampling_data(100)
-deal03.writedata(pathfile_test03 + "_undersampling100.csv")
+deal03.writedata(pathfile_test03[:-4] + "_undersampling100.csv")
 deal04 = dealfile(origin_data_test04)
 deal04.undersampling_data(100)
-deal04.writedata(pathfile_test04 + "_undersampling100.csv")
+deal04.writedata(pathfile_test04[:-4] + "_undersampling100.csv")
 
 
 

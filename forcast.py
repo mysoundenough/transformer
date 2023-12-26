@@ -27,23 +27,32 @@ else:
 
 # 数据读取
 # 源数据
-# pathfile_test01 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数据/19.FMCRD_Data/test_load0_1e_m15_200x5.csv'
-# pathfile_test02 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数据/19.FMCRD_Data/test_noisy_1e_m15_200x5HI.csv'
-# pathfile_test03 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数据/19.FMCRD_Data/test_noisy_1e_m15_200x5LO.csv'
-# pathfile_test04 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数据/19.FMCRD_Data/test_noisy_1e_m15_200x5MED.csv'
-# pathfile_train01 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数据/19.FMCRD_Data/train_load0_1e_m15_200x5.csv'
-# pathfile_train02 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数据/19.FMCRD_Data/train_noisy_1e_m15_200x5HI.csv'
-# pathfile_train03 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数据/19.FMCRD_Data/train_noisy_1e_m15_200x5LO.csv'
-# pathfile_train04 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数据/19.FMCRD_Data/train_noisy_1e_m15_200x5MED.csv'
+# pathfile_test01 = '../../../数据/19.FMCRD_Data/test_load0_1e_m15_200x5.csv'
+# pathfile_test02 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5HI.csv'
+# pathfile_test03 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5LO.csv'
+# pathfile_test04 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5MED.csv'
+# pathfile_train01 = '../../../数据/19.FMCRD_Data/train_load0_1e_m15_200x5.csv'
+# pathfile_train02 = '../../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5HI.csv'
+# pathfile_train03 = '../../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5LO.csv'
+# pathfile_train04 = '../../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5MED.csv'
 # undersampling10
-pathfile_test01 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数据/19.FMCRD_Data/test_load0_1e_m15_200x5_undersampling100.csv'
-pathfile_test02 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数据/19.FMCRD_Data/test_noisy_1e_m15_200x5HI_undersampling100.csv'
-pathfile_test03 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数据/19.FMCRD_Data/test_noisy_1e_m15_200x5LO_undersampling100.csv'
-pathfile_test04 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数据/19.FMCRD_Data/test_noisy_1e_m15_200x5MED_undersampling100.csv'
-pathfile_train01 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数据/19.FMCRD_Data/train_load0_1e_m15_200x5_undersampling100.csv'
-pathfile_train02 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数据/19.FMCRD_Data/train_noisy_1e_m15_200x5HI_undersampling100.csv'
-pathfile_train03 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数据/19.FMCRD_Data/train_noisy_1e_m15_200x5LO_undersampling100.csv'
-pathfile_train04 = '/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/数据/19.FMCRD_Data/train_noisy_1e_m15_200x5MED_undersampling100.csv'
+pathfile_test01 = '../../../数据/19.FMCRD_Data/test_load0_1e_m15_200x5_undersampling100.csv'
+pathfile_test02 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5HI_undersampling100.csv'
+pathfile_test03 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5LO_undersampling100.csv'
+pathfile_test04 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5MED_undersampling100.csv'
+pathfile_train01 = '../../../数据/19.FMCRD_Data/train_load0_1e_m15_200x5_undersampling100.csv'
+pathfile_train02 = '../../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5HI_undersampling100.csv'
+pathfile_train03 = '../../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5LO_undersampling100.csv'
+pathfile_train04 = '../../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5MED_undersampling100.csv'
+# win
+# pathfile_test01 = '../../../数据/19.FMCRD_Data/test_load0_1e_m15_200x5_undersampling100.csv'
+# pathfile_test02 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5HI_undersampling100.csv'
+# pathfile_test03 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5LO_undersampling100.csv'
+# pathfile_test04 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5MED_undersampling100.csv'
+# pathfile_train01 = '../../../数据/19.FMCRD_Data/train_load0_1e_m15_200x5_undersampling100.csv'
+# pathfile_train02 = '../../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5HI_undersampling100.csv'
+# pathfile_train03 = '../../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5LO_undersampling100.csv'
+# pathfile_train04 = '../../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5MED_undersampling100.csv'
 
 
 read01 = readfile(pathfile_test01)
@@ -62,14 +71,14 @@ origin_data_train01 = read05.returndata()
 origin_data_train02 = read06.returndata()
 origin_data_train03 = read07.returndata()
 origin_data_train04 = read08.returndata()
-print("origin_data_test01", origin_data_test01)
-print("origin_data_test02", origin_data_test02)
-print("origin_data_test03", origin_data_test03)
-print("origin_data_test04", origin_data_test04)
-print("origin_data_train01", origin_data_train01)
-print("origin_data_train02", origin_data_train02)
-print("origin_data_train03", origin_data_train03)
-print("origin_data_train04", origin_data_train04)
+# print("origin_data_test01", origin_data_test01)
+# print("origin_data_test02", origin_data_test02)
+# print("origin_data_test03", origin_data_test03)
+# print("origin_data_test04", origin_data_test04)
+# print("origin_data_train01", origin_data_train01)
+# print("origin_data_train02", origin_data_train02)
+# print("origin_data_train03", origin_data_train03)
+# print("origin_data_train04", origin_data_train04)
 
 # 数据分析
 # from data import dealfile
@@ -83,7 +92,8 @@ print("origin_data_train04", origin_data_train04)
 # deal04.dealdata()
 
 # pd concat
-train_info_00 = pd.concat([origin_data_train01,origin_data_train02,origin_data_train03,origin_data_train04])
+# train_info_00 = pd.concat([origin_data_train01,origin_data_train02,origin_data_train03,origin_data_train04])
+test_info_00 = pd.concat([origin_data_test01,origin_data_test02,origin_data_test03,origin_data_test04])
 
 
 # 转化为numpy的array格式
@@ -92,7 +102,25 @@ train_info_00 = pd.concat([origin_data_train01,origin_data_train02,origin_data_t
 # train_info_03 = np.array(origin_data_train03.iloc[0:-1:100, 0:-1], dtype = 'float32')
 # train_info_04 = np.array(origin_data_train04.iloc[0:-1:100, 0:-1], dtype = 'float32')
 
-train_info = np.array(train_info_00.iloc[0:-1:1, 1:-1], dtype = 'float32')
+# 训练数据划分验证集比率
+eval_rate= 0.01
+# 训练数据
+end01 = math.floor((1-eval_rate)*origin_data_train01.shape[0])
+train_info01 = np.array(origin_data_train01.iloc[0:end01:1, 1:-1], dtype = 'float32')
+end02 = math.floor((1-eval_rate)*origin_data_train02.shape[0])
+train_info02 = np.array(origin_data_train02.iloc[0:end02:1, 1:-1], dtype = 'float32')
+end03 = math.floor((1-eval_rate)*origin_data_train03.shape[0])
+train_info03 = np.array(origin_data_train03.iloc[0:end03:1, 1:-1], dtype = 'float32')
+end04 = math.floor((1-eval_rate)*origin_data_train04.shape[0])
+train_info04 = np.array(origin_data_train04.iloc[0:end04:1, 1:-1], dtype = 'float32')
+# 验证数据
+eval_info01 = np.array(origin_data_train01.iloc[end01:-1, 1:-1], dtype = 'float32')
+eval_info02 = np.array(origin_data_train02.iloc[end02:-1, 1:-1], dtype = 'float32')
+eval_info03 = np.array(origin_data_train03.iloc[end03:-1, 1:-1], dtype = 'float32')
+eval_info04 = np.array(origin_data_train04.iloc[end04:-1, 1:-1], dtype = 'float32')
+# 测试数据
+test_info = np.array(test_info_00.iloc[0:-1:1, 1:-1], dtype = 'float32')
+
 
 # 数据形成source target batchs
 # 批次化数据
@@ -118,7 +146,24 @@ train_batch_size = 20
 # 测试验证bsz
 eval_batch_size = 10
 
-train_data = batchify(train_info, train_batch_size)
+# for _ in range(4): 训练数据 成 batch后合并
+train_data01 = batchify(train_info01, train_batch_size)
+train_data02 = batchify(train_info02, train_batch_size)
+train_data03 = batchify(train_info03, train_batch_size)
+train_data04 = batchify(train_info04, train_batch_size)
+train_data = torch.cat([train_data01, train_data02], dim=0)
+# train_data = torch.cat([train_data, train_data03], dim=0)
+# train_data = torch.cat([train_data, train_data04], dim=0)
+# 验证数据 成batch后合并
+eval_data01 = batchify(eval_info01, eval_batch_size)
+eval_data02 = batchify(eval_info02, eval_batch_size)
+eval_data03 = batchify(eval_info03, eval_batch_size)
+eval_data04 = batchify(eval_info04, eval_batch_size)
+eval_data = torch.cat([eval_data01, eval_data02], dim=0)
+eval_data = torch.cat([eval_data, eval_data03], dim=0)
+eval_data = torch.cat([eval_data, eval_data04], dim=0)
+# 测试数据 成batch
+test_data = batchify(test_info, eval_batch_size)
 
 # 时序长度允许最大值为35
 bptt = 35
@@ -199,7 +244,7 @@ def train():
         optimizer.zero_grad()
         
         # 将数据装入model得到输出
-        output = model(data, targets, source_mask, target_mask)
+        output = model(data, data, source_mask, target_mask)
         # 将输入与目标传入损失函数对象
         # print(output.shape)
         # print(targets.shape)
@@ -265,11 +310,16 @@ def evaluate(eval_model, data_source):
         # 与训练步骤基本一致
         for i in range(0, data_source.size(0) - 1, bptt):
             data, targets = get_batch(data_source, i)
-            output = eval_model(data)
+            # 获得mask
+            source_mask = Variable(torch.ones(data.shape[1])).to(device)
+            # source_mask = subsequent_mask(data.shape[1]).to(device)
+            target_mask = subsequent_mask(targets.shape[1]).to(device)
+            # 设置优化器初始为0梯度
+            output = eval_model(data, data, source_mask, target_mask)
             # 对输出形状进行扁平化 变为全部词汇的概率分布
-            output_flat = output.view(-1, data.shape[0] * data.shape[1] * data.shape[2])
+            # output_flat = output.view(-1, data.shape[0] * data.shape[1] * data.shape[2])
             # 获得评估过程的总损失
-            total_loss += criterion(output_flat, targets).item()
+            total_loss += criterion(output.reshape(-1), targets.reshape(-1))
     # 返回每轮总损失
     return total_loss
 
@@ -291,8 +341,8 @@ for epoch in range(1, epochs+1):
     train()
     # 该轮训练后我们的模型参数已经发生了变化
     # 将模型和评估数据传入评估函数
-    # val_loss = evaluate(model, val_data)
-    val_loss = 0
+    val_loss = evaluate(model, eval_data)
+    # val_loss = 0
     # 之后打印每轮的评估日志 分别有轮数 耗时 验证损失 验证困惑度
     print('-' * 89)
     print('| end of epoch {:3d} | time: {:5.2f}s | valid loss {:5.2f} | '
@@ -309,8 +359,7 @@ for epoch in range(1, epochs+1):
 
 
 # 模型测试 依然使用evaluate函数 best_model以及测试数据
-# test_loss = evaluate(best_model, test_data)
-test_loss = 0
+test_loss = evaluate(best_model, test_data)
 
 # 打印测试日志 包括测试损失和困惑度
 print('=' * 89)
