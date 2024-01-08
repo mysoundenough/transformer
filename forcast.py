@@ -11,7 +11,7 @@ from data import readfile
 from data import dealfile
 
 # 导入网络模型
-from unembed_transformer_net import *
+from unembed_transformer_net_f import *
 
 
 # 计算核心
@@ -319,7 +319,7 @@ def evaluate(eval_model, data_source):
 best_val_loss = float("inf")
 
 # 定义训练轮数
-epochs = 30
+epochs = 2
 
 # 定义最佳模型训练变量 初始值为None
 best_model = None
@@ -358,5 +358,7 @@ print('| End of training | test loss {:5.2f} | test ppl {:8.2f}'.format(test_los
 
 
 
-
 # 模型保存
+torch.save(best_model, './Net/Transformer_Testmachine_sourceforcast_net.pkl')
+# 只保存神经网络的模型参数
+torch.save(best_model.state_dict(), './Net/Transformer_Testmachine_sourceforcast_net_params.pkl')
