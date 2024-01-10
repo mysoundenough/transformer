@@ -107,10 +107,10 @@ train_info03 = np.array(origin_data_train03.iloc[0:end03:1, 1:-1], dtype = 'floa
 end04 = math.floor((1-eval_rate)*origin_data_train04.shape[0])
 train_info04 = np.array(origin_data_train04.iloc[0:end04:1, 1:-1], dtype = 'float32')
 # 训练数据标签
-train_label01 = np.zeros(origin_data_train01.iloc[0:end01:1, -1].shape[0], dtype = 'float32')
-train_label02 = np.ones(origin_data_train02.iloc[0:end02:1, -1].shape[0], dtype = 'float32')
-train_label03 = 2 * np.ones(origin_data_train03.iloc[0:end03:1, -1].shape[0], dtype = 'float32')
-train_label04 = 3 * np.ones(origin_data_train04.iloc[0:end04:1, -1].shape[0], dtype = 'float32')
+train_label01 = np.zeros(origin_data_train01.iloc[0:end01:1, -1].shape[0], dtype = 'long')
+train_label02 = np.ones(origin_data_train02.iloc[0:end02:1, -1].shape[0], dtype = 'long')
+train_label03 = 2 * np.ones(origin_data_train03.iloc[0:end03:1, -1].shape[0], dtype = 'long')
+train_label04 = 3 * np.ones(origin_data_train04.iloc[0:end04:1, -1].shape[0], dtype = 'long')
 
 # 验证数据
 eval_info01 = np.array(origin_data_train01.iloc[end01:-1, 1:-1], dtype = 'float32')
@@ -118,10 +118,10 @@ eval_info02 = np.array(origin_data_train02.iloc[end02:-1, 1:-1], dtype = 'float3
 eval_info03 = np.array(origin_data_train03.iloc[end03:-1, 1:-1], dtype = 'float32')
 eval_info04 = np.array(origin_data_train04.iloc[end04:-1, 1:-1], dtype = 'float32')
 # 验证数据标签
-eval_label01 = np.zeros(origin_data_train01.iloc[end01:-1, -1].shape[0], dtype = 'float32')
-eval_label02 = np.ones(origin_data_train02.iloc[end02:-1, -1].shape[0], dtype = 'float32')
-eval_label03 = 2 * np.ones(origin_data_train03.iloc[end03:-1, -1].shape[0], dtype = 'float32')
-eval_label04 = 3 * np.ones(origin_data_train04.iloc[end04:-1, -1].shape[0], dtype = 'float32')
+eval_label01 = np.zeros(origin_data_train01.iloc[end01:-1, -1].shape[0], dtype = 'long')
+eval_label02 = np.ones(origin_data_train02.iloc[end02:-1, -1].shape[0], dtype = 'long')
+eval_label03 = 2 * np.ones(origin_data_train03.iloc[end03:-1, -1].shape[0], dtype = 'long')
+eval_label04 = 3 * np.ones(origin_data_train04.iloc[end04:-1, -1].shape[0], dtype = 'long')
 
 # 测试数据
 test_info = np.array(test_info_00.iloc[0:-1:1, 1:-1], dtype = 'float32')
@@ -258,7 +258,7 @@ criterion = nn.CrossEntropyLoss()
 # criterion = nn.MSELoss()
 
 # 学习率初始值为5.0
-lr = 5.0
+lr = 0.01
 
 # 优化器选择torch自带的SGD随机梯度下降方法 并把lr传入其中
 optimizer = torch.optim.SGD(model.parameters(), lr=lr)
@@ -281,8 +281,13 @@ def train():
     start_time = time.time()
     # 开始遍历批次数据
     for batch, i in enumerate(range(0, train_data.shape[0] - 1, bptt)):
+        
+        
         # 通过get_batch
         data, targets = get_batch(train_data, train_label, i)
+        # 舍弃最后一组数据
+        if targets.shape[0] < bptt:
+            break;
         # 获得mask
         source_mask = Variable(torch.ones(data.shape[1])).to(device)
         # source_mask = subsequent_mask(data.shape[1]).to(device)
@@ -293,13 +298,11 @@ def train():
         # 将数据装入model得到输出
         output = model(data, data, source_mask, target_mask)
         # 将输入与目标传入损失函数对象
-        print(output.shape)
-        print(targets.shape)
-        print(output[0])
-        print(targets[0])
+        # print(output.shape)
+        # print(targets.shape)
+        # print(output[0])
+        # print(targets[0])
         
-        # loss = 0
-        # for i in range(output.shape[0]):
         loss = criterion(output, targets)
         # print(loss.shape, loss)
         
@@ -358,17 +361,19 @@ def evaluate(eval_model, data_source):
     with torch.no_grad():
         # 与训练步骤基本一致
         for i in range(0, data_source.size(0) - 1, bptt):
-            data, targets = get_batch(data_source, i)
+            data, targets = get_batch(data_source, eval_label, i)
+            if targets.shape[0] < bptt:
+                break;
             # 获得mask
             source_mask = Variable(torch.ones(data.shape[1])).to(device)
             # source_mask = subsequent_mask(data.shape[1]).to(device)
-            target_mask = subsequent_mask(targets.shape[1]).to(device)
+            target_mask = subsequent_mask(data.shape[1]).to(device)
             # 设置优化器初始为0梯度
             output = eval_model(data, data, source_mask, target_mask)
             # 对输出形状进行扁平化 变为全部词汇的概率分布
             # output_flat = output.view(-1, data.shape[0] * data.shape[1] * data.shape[2])
             # 获得评估过程的总损失
-            total_loss += criterion(output.reshape(-1), targets.reshape(-1))
+            total_loss += criterion(output, targets)
     # 返回每轮总损失
     return total_loss
 
