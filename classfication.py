@@ -13,8 +13,8 @@ from data import dealfile
 # 导入网络模型
 from unembed_transformer_net_c import *
 
-import os
-os.environ['KMP_DUPLICATE_LIB_OK']='True'
+# import os
+# os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
 # 计算核心
 device = None
@@ -95,6 +95,13 @@ test_info_00 = pd.concat([origin_data_test01,origin_data_test02,origin_data_test
 # train_info_03 = np.array(origin_data_train03.iloc[0:-1:100, 0:-1], dtype = 'float32')
 # train_info_04 = np.array(origin_data_train04.iloc[0:-1:100, 0:-1], dtype = 'float32')
 
+
+# 数据均衡操作
+# 对少量的样本做过采样操作
+origin_data_train03 = pd.concat([origin_data_train03,origin_data_train03,origin_data_train03,origin_data_train03])
+origin_data_train03 = origin_data_train03.iloc[0:origin_data_train01.shape[0], :]
+
+
 # 训练数据划分验证集比率
 eval_rate= 0.01
 # 训练数据
@@ -125,9 +132,9 @@ eval_label04 = 3 * np.ones(origin_data_train04.iloc[end04:-1, -1].shape[0], dtyp
 
 # 测试数据
 test_info = np.array(test_info_00.iloc[0:-1:1, 1:-1], dtype = 'float32')
+# 测试数据标签
 # test_label = np.array(test_info_00.iloc[, -1])
 
-# 测试数据标签
 
 
 # 数据形成source target batchs
@@ -167,9 +174,9 @@ def label_batchify(data, bsz):
 
 # 使用batch_ify来处理训练数据
 # 训练集bsz
-train_batch_size = 20
+train_batch_size = 200
 # 测试验证bsz
-eval_batch_size = 20
+eval_batch_size = 200
 
 # for _ in range(4): 训练数据 成 batch后合并
 train_data01 = batchify(train_info01, train_batch_size)
