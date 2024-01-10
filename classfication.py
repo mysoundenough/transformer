@@ -302,7 +302,8 @@ def train():
         # print(targets.shape)
         # print(output[0])
         # print(targets[0])
-        
+        output = output.type(torch.FloatTensor)
+        targets = targets.type(torch.LongTensor)
         loss = criterion(output, targets)
         # print(loss.shape, loss)
         
@@ -373,6 +374,8 @@ def evaluate(eval_model, data_source):
             # 对输出形状进行扁平化 变为全部词汇的概率分布
             # output_flat = output.view(-1, data.shape[0] * data.shape[1] * data.shape[2])
             # 获得评估过程的总损失
+            targets = targets.type(torch.LongTensor)
+            output = output.type(torch.FloatTensor)
             total_loss += criterion(output, targets)
     # 返回每轮总损失
     return total_loss
