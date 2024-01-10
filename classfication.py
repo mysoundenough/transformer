@@ -258,13 +258,13 @@ criterion = nn.CrossEntropyLoss()
 # criterion = nn.MSELoss()
 
 # 学习率初始值为5.0
-lr = 0.01
+lr = 1
 
 # 优化器选择torch自带的SGD随机梯度下降方法 并把lr传入其中
 optimizer = torch.optim.SGD(model.parameters(), lr=lr)
 
 # 定义学习率调整器 使用torch自带的lr_scheduler 将优化器传入
-scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 1.0, gamma=0.997)
+scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 1.0, gamma=0.97)
 
 
 # 训练 验证 测试
@@ -382,7 +382,7 @@ def evaluate(eval_model, data_source):
 best_val_loss = float("inf")
 
 # 定义训练轮数
-epochs = 2
+epochs = 200
 
 # 定义最佳模型训练变量 初始值为None
 best_model = None
