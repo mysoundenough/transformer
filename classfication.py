@@ -136,7 +136,6 @@ test_info = np.array(test_info_00.iloc[0:-1:1, 1:-1], dtype = 'float32')
 # test_label = np.array(test_info_00.iloc[, -1])
 
 
-
 # 数据形成source target batchs
 # 批次化数据
 def batchify(data, bsz):
@@ -187,7 +186,8 @@ train_data03 = batchify(train_info03, train_batch_size)
 train_data_label03 = label_batchify(train_label03, train_batch_size)
 train_data04 = batchify(train_info04, train_batch_size)
 train_data_label04 = label_batchify(train_label04, train_batch_size)
-# 将标签concat
+# 将标签concat 
+# 将训练数据乱序
 train_data = torch.cat([train_data01, train_data02], dim=0)
 train_data = torch.cat([train_data, train_data03], dim=0)
 train_data = torch.cat([train_data, train_data04], dim=0)
@@ -218,7 +218,7 @@ test_data = batchify(test_info, eval_batch_size)
 # test_label = label_batchify()
 
 # 时序长度允许最大值为35
-bptt = 35
+bptt = 40
 
 def get_batch(source, target, i):
     seq_len = min(bptt, len(source) - 1 - i)
@@ -233,19 +233,19 @@ def get_batch(source, target, i):
 
 
 # 设置模型超参数 初始化模型
-V = 35
+V = 1000
 Variety = 4
-N = 2
+N = 8
 
 
 # 词嵌入大小为200
 d_model = 14
 
 # 前馈全连接的节点数
-nhid = 200
+nhid = 2000
 
 # 编码器层数量
-nlayers = 2
+nlayers = 8
 
 # 多头注意力机制
 nhead = 2
@@ -265,13 +265,13 @@ criterion = nn.CrossEntropyLoss()
 # criterion = nn.MSELoss()
 
 # 学习率初始值为5.0
-lr = 1
+lr = 0.01
 
 # 优化器选择torch自带的SGD随机梯度下降方法 并把lr传入其中
 optimizer = torch.optim.SGD(model.parameters(), lr=lr)
 
 # 定义学习率调整器 使用torch自带的lr_scheduler 将优化器传入
-scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 1.0, gamma=0.97)
+scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 1.0, gamma=0.9999)
 
 
 # 训练 验证 测试
@@ -392,7 +392,7 @@ def evaluate(eval_model, data_source):
 best_val_loss = float("inf")
 
 # 定义训练轮数
-epochs = 200
+epochs = 2000
 
 # 定义最佳模型训练变量 初始值为None
 best_model = None
