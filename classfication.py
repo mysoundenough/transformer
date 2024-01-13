@@ -24,7 +24,7 @@ elif torch.backends.mps.is_built():
     device = torch.device("mps")
 else:
     device = torch.device("cpu")
-# print(device)
+print(device)
 
 
 # 数据读取
@@ -218,7 +218,7 @@ test_data = batchify(test_info, eval_batch_size)
 # test_label = label_batchify()
 
 # 时序长度允许最大值为35
-bptt = 40
+bptt = 80
 
 def get_batch(source, target, i):
     seq_len = min(bptt, len(source) - 1 - i)
@@ -233,27 +233,26 @@ def get_batch(source, target, i):
 
 
 # 设置模型超参数 初始化模型
-V = 1000
+V = 1000 # 1000
 Variety = 4
 N = 8
-
 
 # 词嵌入大小为200
 d_model = 14
 
 # 前馈全连接的节点数
-nhid = 2000
+nhid = 200 # 2000
 
 # 编码器层数量
 nlayers = 8
 
 # 多头注意力机制
-nhead = 2
+nhead = 2 # 7
 
 # 置0比率
 dropout = 0.2
 
-model = make_model(V,Variety,N,d_model,nhid,nhead,train_batch_size,dropout)
+model = make_model(V,Variety,nlayers,d_model,nhid,nhead,train_batch_size,dropout)
 # 将模型迁移到gpu
 model.to(device)
 
@@ -284,6 +283,11 @@ def train():
     model.train()
     # 初始损失定义为0
     total_loss = 0
+    # 准确率
+    total = 0
+    correct = 0
+    predicted = None
+    val_accuracy = 0.0
     # 获得当前时间
     start_time = time.time()
     # 开始遍历批次数据
@@ -313,9 +317,15 @@ def train():
         targets = targets.type(torch.LongTensor)
         loss = criterion(output, targets)
         # print(loss.shape, loss)
-        
         # 损失进行反向传播得到损失总和
         loss.backward()
+        
+        # 训练准确率
+        predicted = torch.max(output.data,1)[1]
+        correct += (predicted == targets).sum()
+        total += targets.shape[0]
+        val_accuracy = float(correct * 100)/float(total)
+        
         # 使用nn自带的clip_grad_norm_进行梯度规范化 防止出现梯度消失或者爆炸
         nn.utils.clip_grad_norm_(model.parameters(), 0.5)
         # 模型参数更新
@@ -333,11 +343,11 @@ def train():
             # 平均损失 以及困惑度 困惑度是语言模型的重要标准 计算方法
             # 交叉熵平均损失取自然对数的底数
             print('| epoch {:3d} | {:5d}/{:5d} batches | '
-                  'lr {:02.2f} | ms/batch {:5.2f} | '
-                  'loss {:5.2f} | ppl {:8.2f}'.format(
+                  'lr {:02.8f} | ms/batch {:5.2f} | '
+                  'loss {:5.2f} | acc {:2.5f}%'.format(
                       epoch, batch, len(train_data) // bptt, 
                       scheduler.get_lr()[0], elapsed * 1000 / log_interval,
-                      cur_loss, math.exp(min(10, cur_loss))))
+                      cur_loss, val_accuracy))
         
             # 每个批次结束后总损失归0
             total_loss = 0
@@ -366,6 +376,11 @@ def evaluate(eval_model, data_source):
     eval_model.eval()
     # 总损失
     total_loss = 0
+    # 准确率
+    total = 0
+    correct = 0
+    predicted = None
+    val_accuracy = 0.0
     with torch.no_grad():
         # 与训练步骤基本一致
         for i in range(0, data_source.size(0) - 1, bptt):
@@ -380,12 +395,25 @@ def evaluate(eval_model, data_source):
             output = eval_model(data, data, source_mask, target_mask)
             # 对输出形状进行扁平化 变为全部词汇的概率分布
             # output_flat = output.view(-1, data.shape[0] * data.shape[1] * data.shape[2])
-            # 获得评估过程的总损失
             targets = targets.type(torch.LongTensor)
             output = output.type(torch.FloatTensor)
+            # print('output', output)
+            # print('targets', targets)
+            
+            # 获得评估过程的总损失
             total_loss += criterion(output, targets)
-    # 返回每轮总损失
-    return total_loss
+            
+            # 评估准确率
+            predicted = torch.max(output.data,1)[1]
+            correct += (predicted == targets).sum()
+            total += targets.shape[0]
+            # print('total', total)
+            # print('correct', correct)
+            # print('predicted', predicted)
+            
+    # 返回每轮总损失,准确率
+    val_accuracy = float(correct * 100)/float(total)
+    return total_loss, val_accuracy
 
 # 模型验证评估
 # 首先初始化最佳验证损失 初始值为无穷大
@@ -405,13 +433,13 @@ for epoch in range(1, epochs+1):
     train()
     # 该轮训练后我们的模型参数已经发生了变化
     # 将模型和评估数据传入评估函数
-    val_loss = evaluate(model, eval_data)
+    val_loss, val_accuracy = evaluate(model, eval_data)
     # val_loss = 0
     # 之后打印每轮的评估日志 分别有轮数 耗时 验证损失 验证困惑度
     print('-' * 89)
     print('| end of epoch {:3d} | time: {:5.2f}s | valid loss {:5.2f} | '
-          'valid ppl {:8.2f}'.format(epoch, (time.time() - epoch_start_time), 
-                                     val_loss, math.exp(min(709, val_loss))))
+          'acc {:2.5f}%'.format(epoch, (time.time() - epoch_start_time), 
+                                     val_loss, val_accuracy))
     print('-' * 89)
     # 我们将比较哪一轮损失最小 赋值给best_val_loss,
     # 并取该损失下模型的best_model
