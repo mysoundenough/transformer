@@ -40,10 +40,10 @@ pathfile_test01 = '../../../数据/19.FMCRD_Data/test_load0_1e_m15_200x5_undersa
 pathfile_test02 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5HI_undersampling100.csv'
 pathfile_test03 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5LO_undersampling100.csv'
 pathfile_test04 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5MED_undersampling100.csv'
-pathfile_train01 = '../../../数据/19.FMCRD_Data/train_load0_1e_m15_200x5_undersampling100.csv'
-pathfile_train02 = '../../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5HI_undersampling100.csv'
-pathfile_train03 = '../../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5LO_undersampling100.csv'
-pathfile_train04 = '../../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5MED_undersampling100.csv'
+pathfile_train01 = '../../../数据/19.FMCRD_Data/source_data_01.csv'
+pathfile_train02 = '../../../数据/19.FMCRD_Data/source_data_02.csv'
+pathfile_train03 = '../../../数据/19.FMCRD_Data/source_data_03.csv'
+pathfile_train04 = '../../../数据/19.FMCRD_Data/source_data_04.csv'
 
 
 read01 = readfile(pathfile_test01)
@@ -97,20 +97,20 @@ test_info_00 = pd.concat([origin_data_test01,origin_data_test02,origin_data_test
 eval_rate= 0.01
 # 训练数据
 end01 = math.floor((1-eval_rate)*origin_data_train01.shape[0])
-train_info01 = np.array(origin_data_train01.iloc[0:end01:1, 1:-1], dtype = 'float32')
+train_info01 = np.array(origin_data_train01.iloc[0:end01:1, 0:-1], dtype = 'float32')
 end02 = math.floor((1-eval_rate)*origin_data_train02.shape[0])
-train_info02 = np.array(origin_data_train02.iloc[0:end02:1, 1:-1], dtype = 'float32')
+train_info02 = np.array(origin_data_train02.iloc[0:end02:1, 0:-1], dtype = 'float32')
 end03 = math.floor((1-eval_rate)*origin_data_train03.shape[0])
-train_info03 = np.array(origin_data_train03.iloc[0:end03:1, 1:-1], dtype = 'float32')
+train_info03 = np.array(origin_data_train03.iloc[0:end03:1, 0:-1], dtype = 'float32')
 end04 = math.floor((1-eval_rate)*origin_data_train04.shape[0])
-train_info04 = np.array(origin_data_train04.iloc[0:end04:1, 1:-1], dtype = 'float32')
+train_info04 = np.array(origin_data_train04.iloc[0:end04:1, 0:-1], dtype = 'float32')
 # 验证数据
-eval_info01 = np.array(origin_data_train01.iloc[end01:-1, 1:-1], dtype = 'float32')
-eval_info02 = np.array(origin_data_train02.iloc[end02:-1, 1:-1], dtype = 'float32')
-eval_info03 = np.array(origin_data_train03.iloc[end03:-1, 1:-1], dtype = 'float32')
-eval_info04 = np.array(origin_data_train04.iloc[end04:-1, 1:-1], dtype = 'float32')
+eval_info01 = np.array(origin_data_train01.iloc[end01:-1, 0:-1], dtype = 'float32')
+eval_info02 = np.array(origin_data_train02.iloc[end02:-1, 0:-1], dtype = 'float32')
+eval_info03 = np.array(origin_data_train03.iloc[end03:-1, 0:-1], dtype = 'float32')
+eval_info04 = np.array(origin_data_train04.iloc[end04:-1, 0:-1], dtype = 'float32')
 # 测试数据
-test_info = np.array(test_info_00.iloc[0:-1:1, 1:-1], dtype = 'float32')
+test_info = np.array(test_info_00.iloc[0:-1:1, 0:-1], dtype = 'float32')
 
 
 # 数据形成source target batchs
@@ -221,6 +221,8 @@ def train():
     model.train()
     # 初始损失定义为0
     total_loss = 0
+    # 模型mape计算
+    
     # 获得当前时间
     start_time = time.time()
     # 开始遍历批次数据
@@ -235,7 +237,7 @@ def train():
         optimizer.zero_grad()
         
         # 将数据装入model得到输出
-        output = model(data, data, source_mask, target_mask)
+        output = model(data, targets, source_mask, target_mask)
         # 将输入与目标传入损失函数对象
         # print(output.shape)
         # print(targets.shape)
@@ -265,10 +267,10 @@ def train():
             # 交叉熵平均损失取自然对数的底数
             print('| epoch {:3d} | {:5d}/{:5d} batches | '
                   'lr {:02.2f} | ms/batch {:5.2f} | '
-                  'loss {:5.2f} | ppl {:8.2f}'.format(
+                  'loss {:5.2f} | mape {:8.2f}'.format(
                       epoch, batch, len(train_data) // bptt, 
                       scheduler.get_lr()[0], elapsed * 1000 / log_interval,
-                      cur_loss, math.exp(min(10, cur_loss))))
+                      cur_loss, cur_loss))
         
             # 每个批次结束后总损失归0
             total_loss = 0
@@ -337,8 +339,8 @@ for epoch in range(1, epochs+1):
     # 之后打印每轮的评估日志 分别有轮数 耗时 验证损失 验证困惑度
     print('-' * 89)
     print('| end of epoch {:3d} | time: {:5.2f}s | valid loss {:5.2f} | '
-          'valid ppl {:8.2f}'.format(epoch, (time.time() - epoch_start_time), 
-                                     val_loss, math.exp(min(709, val_loss))))
+          'valid mape {:2.2f}'.format(epoch, (time.time() - epoch_start_time), 
+                                     val_loss, val_loss))
     print('-' * 89)
     # 我们将比较哪一轮损失最小 赋值给best_val_loss,
     # 并取该损失下模型的best_model
@@ -354,7 +356,7 @@ test_loss = evaluate(best_model, test_data)
 
 # 打印测试日志 包括测试损失和困惑度
 print('=' * 89)
-print('| End of training | test loss {:5.2f} | test ppl {:8.2f}'.format(test_loss, math.exp(min(709, test_loss))))
+print('| End of training | test loss {:5.2f} | mape {:8.2f}'.format(test_loss, test_loss))
 
 
 
