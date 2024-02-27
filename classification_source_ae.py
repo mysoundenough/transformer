@@ -498,7 +498,12 @@ for epoch in range(1, epochs+1):
     scheduler.step()
 
 # 绘制损失下降图
+# 绘制好看一点
+plt.figure(figsize=(8, 6), dpi=100)
 plt.plot(lossmem[0])
+plt.xlabel('Predicted')
+plt.ylabel('Actual')
+plt.title('Confusion Matrix')
 plt.show()
 
 
@@ -513,7 +518,7 @@ print('| End of training | test loss {:5.2f} | test_acc {:8.2f}'.format(test_los
 # 模型保存
 # torch.save(best_model, './Net/Transformer_Testmachine_sourceclassfication_net.pkl')
 # 只保存神经网络的模型参数
-torch.save(best_model.state_dict(), './Net/Transformer_Testmachine_sourceclassfication_net_params_xiao.pkl')
+torch.save(best_model.state_dict(), './Net/Transformer_Testmachine_sourceclassfication_ae_net_params.pkl')
 
 
 

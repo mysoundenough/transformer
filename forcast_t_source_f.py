@@ -26,7 +26,7 @@ else:
 
 
 # 数据读取
-# 源数据
+# 源温度数据
 # pathfile_test01 = '../../../数据/19.FMCRD_Data/test_load0_1e_m15_200x5.csv'
 # pathfile_test02 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5HI.csv'
 # pathfile_test03 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5LO.csv'
@@ -173,7 +173,7 @@ def get_batch(source, i):
 
 # 设置模型超参数 初始化模型
 V = 35
-N = 2
+V2 = 14
 
 # 词嵌入大小为200
 d_model = 14
@@ -190,7 +190,7 @@ nhead = 2
 # 置0比率
 dropout = 0.2
 
-model = make_model(V,V,N,d_model,nhid,nhead,dropout)
+model = make_model(V,V2,nlayers,d_model,nhid,nhead,dropout)
 # 将模型迁移到gpu
 model.to(device)
 
@@ -202,7 +202,7 @@ model.to(device)
 criterion = nn.MSELoss()
 
 # 学习率初始值为5.0
-lr = 5.0
+lr = 0.2
 
 # 优化器选择torch自带的SGD随机梯度下降方法 并把lr传入其中
 optimizer = torch.optim.SGD(model.parameters(), lr=lr)
@@ -321,7 +321,7 @@ def evaluate(eval_model, data_source):
 best_val_loss = float("inf")
 
 # 定义训练轮数
-epochs = 2
+epochs = 50
 
 # 定义最佳模型训练变量 初始值为None
 best_model = None

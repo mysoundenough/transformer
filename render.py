@@ -1,4 +1,4 @@
-from matplotlib import plot
+from matplotlib.pyplot import plot
 
 # 提供算法可视化功能
 

@@ -13,7 +13,10 @@ class readfile():
         print("读取数据开始")
         start = time.time()
         self.data01 = None
-        self.data01 = pd.read_csv(filepath)
+        if filepath[-3:] == 'txt':
+            self.data01 = pd.read_table(filepath, encoding='gbk', header=None)
+        if filepath[-3:] == 'csv':
+            self.data01 = pd.read_csv(filepath, encoding='gbk')
         end = time.time()
         print("读取数据完毕，时间花费：%d", (end - start), "s", sep = "")
         

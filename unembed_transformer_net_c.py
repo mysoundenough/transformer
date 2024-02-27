@@ -313,7 +313,7 @@ class Generator(nn.Module):
         self.project = nn.Linear(d_model * batchsize, classVariety)
     def forward(self, x):
         # 上一层的输出张量
-        # 将线性层连接到softmax层
+        
         timestep = x.shape[0]
         bsz = x.shape[1]
         dmodel = x.shape[2]
@@ -321,6 +321,7 @@ class Generator(nn.Module):
         # print(x.shape)
         x = x.reshape(timestep, bsz * dmodel)
         
+        # 将线性层连接到softmax层
         return F.softmax(self.project(x), dim=-1)
 
 
