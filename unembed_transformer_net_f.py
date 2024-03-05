@@ -135,6 +135,8 @@ class MultiHeadAttention(nn.Module):
             mask = mask.unsqueeze(1)
         batch_size = query.size(0)
         
+        # print("query", query.shape)
+        
         # use zip and view  qkv  4dim to attention == multihead
         query, key, value = \
             [model(x).view(batch_size, -1, self.head, self.d_k).transpose(1,2)

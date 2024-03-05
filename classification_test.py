@@ -42,9 +42,9 @@ print(device)
 # pathfile_train04 = '../../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5MED.csv'
 # undersampling10
 pathfile_test01 = '../../../数据/19.FMCRD_Data/test_load0_1e_m15_200x5_undersampling100.csv'
-pathfile_test02 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5HI_undersampling100.csv'
-pathfile_test03 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5LO_undersampling100.csv'
-pathfile_test04 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5MED_undersampling100.csv'
+pathfile_test02 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5LO_undersampling100.csv'
+pathfile_test03 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5MED_undersampling100.csv'
+pathfile_test04 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5HI_undersampling100.csv'
 pathfile_train01 = '../../../数据/19.FMCRD_Data/source_data_01.csv'
 pathfile_train02 = '../../../数据/19.FMCRD_Data/source_data_02.csv'
 pathfile_train03 = '../../../数据/19.FMCRD_Data/source_data_03.csv'
@@ -304,7 +304,7 @@ dropout = 0.2 # 0.2
 model = make_model(V,Variety,nlayers,d_model,nhid,nhead,train_batch_size,dropout)
 
 # 加载预训练的模型参数
-state_dict = torch.load('./Net/Transformer_Testmachine_sourceclassfication_net_params_xiao.pkl', map_location=torch.device('cpu'))
+state_dict = torch.load('./Net/Transformer_Testmachine_sourceclassfication_net_params.pkl', map_location=torch.device('cpu'))
 # state_dict = torch.load('./Net/Transformer_Testmachine_sourceclassfication_net_params_da.pkl', map_location=torch.device('cpu'))
 model.load_state_dict(state_dict)
 
@@ -328,6 +328,8 @@ optimizer = torch.optim.SGD(model.parameters(), lr=lr)
 # 定义学习率调整器 使用torch自带的lr_scheduler 将优化器传入
 scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 1.0, gamma=0.992) # 0.992 0.9999
 
+# 定义测试次数
+epoch = 1
 
 # 测试
 # 模型评估
@@ -416,9 +418,6 @@ def plot_confusion_matrix(cm, labels_name, title):
 # 首先初始化最佳验证损失 初始值为无穷大
 best_val_loss = float("inf")
 
-# 定义测试次数
-epoch = 1
-
 # 定义最佳模型训练变量 初始值为None
 best_model = None
 
@@ -455,8 +454,12 @@ scheduler.step()
 # plot_confusion_matrix(val_confusion, labels_name, "Classification Confusion Matrix")
 # # plt.savefig('/HAR_cm.png', format='png')
 # plt.show()
+val_confusion = pd.DataFrame(val_confusion)
+val_confusion.columns = ['T-H', 'T-LO', 'T-MED', 'T-HI']
+val_confusion.index = ['T-H', 'T-LO', 'T-MED', 'T-HI']
 
-plt.figure(figsize=(8, 6))
+
+plt.figure(figsize=(8, 6),dpi=400)
 sns.heatmap(val_confusion, annot=True, cmap='Blues', fmt='g', cbar=True, square=True)
 plt.xlabel('Predicted')
 plt.ylabel('Actual')
@@ -495,10 +498,13 @@ test_loss, test_acc, val_confusion = evaluate(best_model, test_data, test_label)
 print('=' * 89)
 print('| End of training | test loss {:5.2f} | test_acc {:8.2f}'.format(test_loss, test_acc))
 
-plt.figure(figsize=(8, 6))
+val_confusion = pd.DataFrame(val_confusion)
+val_confusion.columns = ['H', 'LO', 'MED', 'HI']
+val_confusion.index = ['H', 'LO', 'MED', 'HI']
+
+plt.figure(figsize=(8, 6),dpi=400)
 sns.heatmap(val_confusion, annot=True, cmap='Blues', fmt='g', cbar=True, square=True)
 plt.xlabel('Predicted')
 plt.ylabel('Actual')
 plt.title('Confusion Matrix')
 plt.show()
-

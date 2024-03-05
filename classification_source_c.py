@@ -41,9 +41,9 @@ print(device)
 # pathfile_train04 = '../../../数据/19.FMCRD_Data/train_noisy_1e_m15_200x5MED.csv'
 # undersampling10
 pathfile_test01 = '../../../数据/19.FMCRD_Data/test_load0_1e_m15_200x5_undersampling100.csv'
-pathfile_test02 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5HI_undersampling100.csv'
-pathfile_test03 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5LO_undersampling100.csv'
-pathfile_test04 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5MED_undersampling100.csv'
+pathfile_test02 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5LO_undersampling100.csv'
+pathfile_test03 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5MED_undersampling100.csv'
+pathfile_test04 = '../../../数据/19.FMCRD_Data/test_noisy_1e_m15_200x5HI_undersampling100.csv'
 pathfile_train01 = '../../../数据/19.FMCRD_Data/source_data_01.csv'
 pathfile_train02 = '../../../数据/19.FMCRD_Data/source_data_02.csv'
 pathfile_train03 = '../../../数据/19.FMCRD_Data/source_data_03.csv'
@@ -104,8 +104,8 @@ test_info_00 = pd.concat([origin_data_test01,origin_data_test02,origin_data_test
 
 # 数据均衡操作
 # 对少量的样本做过采样操作
-origin_data_train03 = pd.concat([origin_data_train03,origin_data_train03,origin_data_train03,origin_data_train03])
-origin_data_train03 = origin_data_train03.iloc[0:origin_data_train01.shape[0], :]
+origin_data_train02 = pd.concat([origin_data_train02,origin_data_train02,origin_data_train02,origin_data_train02])
+origin_data_train02 = origin_data_train02.iloc[0:origin_data_train01.shape[0], :]
 
 
 # 训练数据划分验证集比率
@@ -184,7 +184,7 @@ def label_batchify(data, bsz):
 # 训练集bsz
 train_batch_size = 100
 # 测试验证bsz
-eval_batch_size = train_batch_size
+eval_batch_size = 100
 # 测试bsz
 test_batch_size = 100
 
@@ -253,7 +253,8 @@ test_label = torch.cat([test_label, test_data_label04])
 bptt = 80 # 80
 
 def get_batch(source, target, i):
-    seq_len = min(bptt, len(source) - 1 - i)
+    # 分类任务，不需要留一个了 没有-1
+    seq_len = min(bptt, len(source) - i)
     
     # 语言模型训练的源数据的是将batchify的结果的切片[i:i+seq_len]
     data = source[i:i+seq_len]
@@ -288,6 +289,7 @@ model = make_model(V,Variety,nlayers,d_model,nhid,nhead,train_batch_size,dropout
 # 加载预训练的模型参数
 # state_dict = torch.load('./Net/Transformer_Testmachine_sourceclassfication_net_params_xiao.pkl', map_location=torch.device('cpu'))
 # state_dict = torch.load('./Net/Transformer_Testmachine_sourceclassfication_net_params_da.pkl', map_location=torch.device('cpu'))
+# state_dict = torch.load('./Net/Transformer_Testmachine_sourceclassfication_net_params.pkl', map_location=torch.device('cpu'))
 # model.load_state_dict(state_dict)
 
 # 将模型迁移到gpu
@@ -308,6 +310,10 @@ optimizer = torch.optim.SGD(model.parameters(), lr=lr)
 
 # 定义学习率调整器 使用torch自带的lr_scheduler 将优化器传入
 scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 1.0, gamma=0.99) # 0.99 0.9999
+
+# 定义训练轮数
+# epochs = 80
+epochs = 80
 
 
 # 训练 验证 测试
@@ -406,22 +412,6 @@ def train():
 
 # 模型评估
 def evaluate(eval_model, data_source, label_source):
-    """
-    评估函数 包括模型验证和测试
-    Parameters
-    ----------
-    eval_model : model的对象
-        DESCRIPTION.
-        每轮训练后或验证后的模型
-    data_source : dataset
-        DESCRIPTION.
-        验证或测试数据集
-    Returns
-    -------
-    total_loss : TYPE int
-        DESCRIPTION.
-        总损失
-    """
     # 模型进入评估模式
     eval_model.eval()
     # 总损失
@@ -469,12 +459,8 @@ def evaluate(eval_model, data_source, label_source):
 # 首先初始化最佳验证损失 初始值为无穷大
 best_val_loss = float("inf")
 
-# 定义训练轮数
-epochs = bptt
-# epochs = 100
-
 # 定义最佳模型训练变量 初始值为None
-best_model = None
+best_model = model
 
 # 损失记录
 lossmem = [[],[]]
@@ -512,20 +498,31 @@ for epoch in range(1, epochs+1):
 # 绘制好看一点
 my_font=font_manager.FontProperties(fname='/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/图表/仿宋_常规.ttf',size='large')
 plt.figure(figsize=(8, 2), dpi=400)
-plt.plot(lossmem[0])
+plt.plot(lossmem[0], color='blue')
 plt.xlabel('Interation')
 plt.ylabel('Loss')
 plt.title('源域分类训练损失下降过程', rotation=0, fontproperties=my_font)
+plt.legend(['loss'])
 plt.show()
 
+# 绘制准确率上升图
+# 绘制好看一点
+my_font=font_manager.FontProperties(fname='/Users/mayuan/WorkSpace/Science/7毕业论文/workspace/图表/仿宋_常规.ttf',size='large')
+plt.figure(figsize=(8, 2), dpi=400)
+plt.plot(lossmem[1],  color='orange')
+plt.xlabel('Interation')
+plt.ylabel('Loss')
+plt.title('源域分类训练损失下降过程', rotation=0, fontproperties=my_font)
+plt.legend(['acc'])
+plt.show()
 
-# 模型测试 依然使用evaluate函数 best_model以及测试数据
-test_loss, test_acc = evaluate(best_model, test_data, test_label)
+# # 模型测试 依然使用evaluate函数 best_model以及测试数据
+# test_loss, test_acc = evaluate(best_model, test_data, test_label)
 
 
-# 打印测试日志 包括测试损失和困惑度
-print('=' * 89)
-print('| End of training | test loss {:5.2f} | test_acc {:8.5f}%'.format(test_loss, test_acc))
+# # 打印测试日志 包括测试损失和困惑度
+# print('=' * 89)
+# print('| End of training | test loss {:5.2f} | test_acc {:8.5f}%'.format(test_loss, test_acc))
 
 # 模型保存
 # torch.save(best_model, './Net/Transformer_Testmachine_sourceclassfication_net.pkl')

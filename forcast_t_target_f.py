@@ -40,10 +40,9 @@ pathfile_target_true = '../../../数据/SG_T_YY/T_target_true.csv'
 read01 = readfile(pathfile_source_true)
 read02 = readfile(pathfile_target_true)
 
-origin_data_train = read01.returndata()
-origin_data_test = read02.returndata()
-
-
+# 换一下 目标域
+origin_data_test = read01.returndata()
+origin_data_train = read02.returndata()
 
 # 数据分析
 # from data import dealfile
@@ -133,6 +132,11 @@ nhead = 2
 dropout = 0.2
 
 model = make_model(V,V2,nlayers,d_model,nhid,nhead,dropout)
+
+# 导入源域模型的训练参数
+state_dict = torch.load('./Net/Transformer_Testmachine_sourceforcast_net_params.pkl', map_location=torch.device('cpu'))
+model.load_state_dict(state_dict)
+
 # 将模型迁移到gpu
 model.to(device)
 
@@ -294,7 +298,7 @@ print('Finished Training')
 plt.figure(figsize=(8, 2),dpi=400)
 plt.title('Transformer-F源域训练损失下降过程',fontproperties=my_font) # 标题
 plt.plot(range(epochs), all_total_train_loss_sum, color='blue', linestyle='-')
-plt.ylim(0, 10000000)
+# plt.ylim(0, 1800000)
 plt.legend(['train'])
 plt.show()
 
@@ -311,40 +315,44 @@ plt.show()
 test_loss = evaluate(best_model, test_data)
 
 
+
+
+
 # 打印测试日志 包括测试损失和困惑度
 print('=' * 89)
 print('| End of training | test loss {:5.2f} | mape {:8.2f}'.format(test_loss, test_loss))
 
 
+
 # 模型保存
-torch.save(best_model, './Net/Transformer_Testmachine_sourceforcast_net.pkl')
+torch.save(best_model, './Net/Transformer_Testmachine_targetforcast_net.pkl')
 # 只保存神经网络的模型参数
-torch.save(best_model.state_dict(), './Net/Transformer_Testmachine_sourceforcast_net_params.pkl')
+torch.save(best_model.state_dict(), './Net/Transformer_Testmachine_targetforcast_net_params.pkl')
 
 
 
 
-# # 绘制损失图
-# # 计算预测与真实温度之间损失，并输出
-# all_LSTM_MSE = []
-# all_LSTM_MAPE = []
-# for i in range(8):
-#     truepred_MSE = MSE(lstm_true_tempe[i], lstm_pred_tempe[i])
-#     truepred_MAPE = MAPE(lstm_true_tempe[i], lstm_pred_tempe[i])
-#     print('LSTM: 第{}温度，损失值：{}'.format(i+1, truepred_MSE))
-#     all_LSTM_MSE.append(truepred_MSE)
-#     all_LSTM_MAPE.append(truepred_MAPE)
+# 绘制损失图
+# 计算预测与真实温度之间损失，并输出
+all_LSTM_MSE = []
+all_LSTM_MAPE = []
+for i in range(8):
+    truepred_MSE = MSE(lstm_true_tempe[i], lstm_pred_tempe[i])
+    truepred_MAPE = MAPE(lstm_true_tempe[i], lstm_pred_tempe[i])
+    print('LSTM: 第{}温度，损失值：{}'.format(i+1, truepred_MSE))
+    all_LSTM_MSE.append(truepred_MSE)
+    all_LSTM_MAPE.append(truepred_MAPE)
 
 
-# # 输出各个指标真实值与预测值偏差（只输出8个指标）,表示性能
-# for i in range(8):
-#     plt.figure(figsize=(2, 8),dpi=200)
-#     # plt.title('LSTM: Temperure:{}, Loss:{}'.format(i+1, all_LSTM_MSE[i])) # 标题
-#     plt.title('LSTM: Temperure:{}'.format(i+1)) # 标题
-#     plt.plot(range(len(lstm_true_tempe[i])),lstm_true_tempe[i],'-D',linewidth=0.5,markersize=2,color='royalblue',zorder=1)
-#     #plt.plot(range(len(lstm_pred_tempe[i])), lstm_pred_tempe[i], '-D',linewidth=0.5,markersize=2,color='orangered',zorder=2)
-#     #plt.scatter(range(len(lstm_true_tempe[i])), lstm_true_tempe[i], s=50, color='royalblue')
-#     plt.scatter(range(len(lstm_pred_tempe[i])), lstm_pred_tempe[i], s=5, color='orangered', zorder=2)
-#     # plt.legend(['blue is true','orange is pred']) #注释
-#     plt.show()
+# 输出各个指标真实值与预测值偏差（只输出8个指标）,表示性能
+for i in range(8):
+    plt.figure(figsize=(2, 8),dpi=200)
+    # plt.title('LSTM: Temperure:{}, Loss:{}'.format(i+1, all_LSTM_MSE[i])) # 标题
+    plt.title('LSTM: Temperure:{}'.format(i+1)) # 标题
+    plt.plot(range(len(lstm_true_tempe[i])),lstm_true_tempe[i],'-D',linewidth=0.5,markersize=2,color='royalblue',zorder=1)
+    #plt.plot(range(len(lstm_pred_tempe[i])), lstm_pred_tempe[i], '-D',linewidth=0.5,markersize=2,color='orangered',zorder=2)
+    #plt.scatter(range(len(lstm_true_tempe[i])), lstm_true_tempe[i], s=50, color='royalblue')
+    plt.scatter(range(len(lstm_pred_tempe[i])), lstm_pred_tempe[i], s=5, color='orangered', zorder=2)
+    # plt.legend(['blue is true','orange is pred']) #注释
+    plt.show()
 
